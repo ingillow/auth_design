@@ -1,4 +1,6 @@
+import 'package:auth_design/sql_service/sql_service.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 /// сервис аутентификации пользователя
 class AuthService {
@@ -9,8 +11,10 @@ class AuthService {
     try {
       final response = await dio.post('$_baseUrl/api/v1/auth/login',
           data: {'login': login, 'password': password});
+      await SQLService().saveAuthToken(response.data['accessToken']);
     } catch (e) {
       throw Exception(e.toString());
     }
   }
 }
+
